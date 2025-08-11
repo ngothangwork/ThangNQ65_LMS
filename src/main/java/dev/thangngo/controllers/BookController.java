@@ -1,7 +1,11 @@
 package dev.thangngo.controllers;
 
-import dev.thangngo.dtos.BookDTO;
+import dev.thangngo.dtos.requests.book.BookCreateRequest;
+import dev.thangngo.dtos.requests.book.BookUpdateRequest;
+import dev.thangngo.dtos.responses.book.BookDetailResponse;
+import dev.thangngo.dtos.responses.book.BookResponse;
 import dev.thangngo.services.BookService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,29 +21,32 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<BookDTO>> getAllBooks() {
-        return ResponseEntity.ok(bookService.getAllBooks());
+    @PostMapping
+    public ResponseEntity<BookResponse> createBook(
+            @Valid @RequestBody BookCreateRequest request) {
+        return ResponseEntity.ok(bookService.createBook(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> getBookById(@PathVariable("id") int id) {
-        BookDTO bookDTO = bookService.getBookById(id);
-        return bookDTO != null
-                ? ResponseEntity.ok(bookDTO)
-                : ResponseEntity.notFound().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<BookResponse> updateBook(
+            @PathVariable("id") int id,
+            @Valid @RequestBody BookUpdateRequest request) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable("id") int id) {
-        bookService.removeBook(id);
-        return ResponseEntity.ok("Book deleted successfully");
+    public ResponseEntity<Void> deleteBook(@PathVariable("id") int id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BookDetailResponse> getBookById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
+    }
 
-    @PostMapping
-    public ResponseEntity<String> createOrUpdateBook(@RequestBody BookDTO bookDTO) {
-        bookService.createOrUpdate(bookDTO);
-        return ResponseEntity.ok("Book saved successfully");
+    @GetMapping
+    public ResponseEntity<List<BookResponse>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 }

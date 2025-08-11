@@ -1,16 +1,21 @@
 package dev.thangngo.mappers;
 
-import dev.thangngo.dtos.requests.AuthorRequest;
-import dev.thangngo.dtos.responses.AuthorResponse;
+import dev.thangngo.dtos.requests.author.AuthorCreateRequest;
+import dev.thangngo.dtos.requests.author.AuthorUpdateRequest;
+import dev.thangngo.dtos.responses.author.AuthorResponse;
+import dev.thangngo.dtos.responses.author.AuthorDetailResponse;
 import dev.thangngo.entities.Author;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
-    Author toEntity(AuthorRequest request);
+    Author toEntity(AuthorCreateRequest request);
 
-    @Mapping(source = "books", target = "books")
-    AuthorResponse toResponse(Author author);
+    AuthorResponse toResponse(Author entity);
+
+    AuthorDetailResponse toDetailResponse(Author entity);
+
+    void updateEntity(@MappingTarget Author entity, AuthorUpdateRequest request);
 }

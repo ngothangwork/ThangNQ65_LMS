@@ -1,21 +1,14 @@
-package dev.thangngo.dtos.responses;
+package dev.thangngo.dtos.responses.author;
+
+import dev.thangngo.dtos.responses.bookauthor.BookAuthorResponse;
 
 import java.util.Set;
 
-public class AuthorResponse {
+public class AuthorDetailResponse {
     private int id;
     private String name;
     private int birthYear;
-    private Set<BookResponse> books;
-
-    public AuthorResponse() {}
-
-    public AuthorResponse(int id, String name, int birthYear, Set<BookResponse> books) {
-        this.id = id;
-        this.name = name;
-        this.birthYear = birthYear;
-        this.books = books;
-    }
+    private Set<BookAuthorResponse> books;
 
     public int getId() {
         return id;
@@ -41,11 +34,11 @@ public class AuthorResponse {
         this.birthYear = birthYear;
     }
 
-    public Set<BookResponse> getBooks() {
+    public Set<BookAuthorResponse> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<BookResponse> books) {
+    public void setBooks(Set<BookAuthorResponse> books) {
         this.books = books;
     }
 }

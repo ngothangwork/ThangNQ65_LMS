@@ -8,6 +8,7 @@ import java.util.Set;
 public class Author {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "author_id")
     private int id;
 

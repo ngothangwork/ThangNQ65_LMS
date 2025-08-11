@@ -1,8 +1,11 @@
 package dev.thangngo.controllers;
 
-import dev.thangngo.dtos.requests.AuthorRequest;
-import dev.thangngo.dtos.responses.AuthorResponse;
+import dev.thangngo.dtos.requests.author.AuthorCreateRequest;
+import dev.thangngo.dtos.requests.author.AuthorUpdateRequest;
+import dev.thangngo.dtos.responses.author.AuthorResponse;
+import dev.thangngo.dtos.responses.author.AuthorDetailResponse;
 import dev.thangngo.services.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,32 +21,39 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
+    @PostMapping
+    public ResponseEntity<AuthorResponse> createAuthor(
+            @Valid @RequestBody AuthorCreateRequest request) {
+        return ResponseEntity.ok(authorService.createAuthor(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AuthorResponse> updateAuthor(
+            @PathVariable("id") int id,
+            @Valid @RequestBody AuthorUpdateRequest request) {
+        return ResponseEntity.ok(authorService.updateAuthor(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAuthor(@PathVariable("id") int id) {
+        authorService.deleteAuthor(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AuthorDetailResponse> getAuthorById(@PathVariable int id) {
+        return ResponseEntity.ok(authorService.getAuthorById(id));
+    }
+
     @GetMapping
     public ResponseEntity<List<AuthorResponse>> getAllAuthors() {
         return ResponseEntity.ok(authorService.getAllAuthors());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AuthorResponse> getAuthorById(@PathVariable int id) {
-        AuthorResponse response = authorService.getAuthorById(id);
-        return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
+    @GetMapping("/search")
+    public ResponseEntity<List<AuthorResponse>> getAuthorsByName(@RequestParam("name") String name) {
+        return ResponseEntity.ok(authorService.getAuthorsByName(name));
     }
 
-    @PostMapping
-    public ResponseEntity<String> createAuthor(@RequestBody AuthorRequest request) {
-        authorService.createAuthor(request);
-        return ResponseEntity.ok("Author created successfully");
-    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateAuthor(@PathVariable int id, @RequestBody AuthorRequest request) {
-        authorService.updateAuthor(id, request);
-        return ResponseEntity.ok("Author updated successfully");
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAuthor(@PathVariable int id) {
-        authorService.removeAuthor(id);
-        return ResponseEntity.ok("Author deleted successfully");
-    }
 }

@@ -1,15 +1,13 @@
-package dev.thangngo.dtos.requests;
+package dev.thangngo.dtos.requests.author;
 
-public class AuthorRequest {
+import jakarta.validation.constraints.NotNull;
+
+public class AuthorCreateRequest {
+
+    @NotNull
     private String name;
+    @NotNull
     private int birthYear;
-
-    public AuthorRequest() {}
-
-    public AuthorRequest(String name, int birthYear) {
-        this.name = name;
-        this.birthYear = birthYear;
-    }
 
     public String getName() {
         return name;
