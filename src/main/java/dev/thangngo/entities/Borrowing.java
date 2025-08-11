@@ -9,6 +9,7 @@ public class Borrowing {
 
     @Id
     @Column(name = "borrowing_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "borrowing_date")

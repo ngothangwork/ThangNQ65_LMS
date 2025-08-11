@@ -1,4 +1,3 @@
-// File: BookAuthorId.java
 package dev.thangngo.entities;
 
 import jakarta.persistence.Embeddable;
