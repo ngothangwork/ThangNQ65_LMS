@@ -65,8 +65,6 @@ public class BookServiceImpl implements BookService {
             bookAuthor.setBook(book);
             bookAuthor.setAuthor(author);
             bookAuthor.setRole("Author");
-            bookAuthorRepository.save(bookAuthor);
-
             bookAuthors.add(bookAuthor);
         }
 

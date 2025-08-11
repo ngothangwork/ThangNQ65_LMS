@@ -1,5 +1,6 @@
 package dev.thangngo.dtos.responses.borrowing;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.thangngo.dtos.responses.book.BookResponse;
 import dev.thangngo.dtos.responses.member.MemberResponse;
 
@@ -7,9 +8,16 @@ import java.time.LocalDate;
 
 public class BorrowingResponse {
     private int id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate borrowDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dueDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate returnDate;
+
     private String status;
     private String version;
     private MemberResponse member;

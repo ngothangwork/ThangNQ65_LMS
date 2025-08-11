@@ -1,5 +1,6 @@
 package dev.thangngo.dtos.responses.book;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.thangngo.dtos.responses.author.AuthorResponse;
 
 import java.time.LocalDate;
@@ -10,7 +11,10 @@ public class BookResponse {
     private String title;
     private String category;
     private boolean available;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate createDate;
+
     private String version;
     private List<AuthorResponse> authors;
 

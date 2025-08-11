@@ -29,7 +29,7 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MemberResponse> updateMember(
-            @PathVariable int id,
+            @PathVariable("id") int id,
             @Valid @RequestBody MemberUpdateRequest request) {
         return ResponseEntity.ok(memberService.updateMember(id, request));
     }
@@ -45,7 +45,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable int id) {
+    public ResponseEntity<Void> deleteMember(@PathVariable("id") int id) {
         memberService.deleteMember(id);
         return ResponseEntity.noContent().build();
     }
