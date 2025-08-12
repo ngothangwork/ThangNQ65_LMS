@@ -3,8 +3,10 @@ package dev.thangngo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -18,34 +20,40 @@ public class AppConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/thangnq65_lms?useSSL=false&serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("123456");
-        return dataSource;
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setUrl("jdbc:mysql://localhost:3306/thangnq65_lms?allowPublicKeyRetrieval=true&useSSL=false");
+        ds.setUsername("root");
+        ds.setPassword("123456");
+        return ds;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
-        factoryBean.setDataSource(dataSource());
-        factoryBean.setPackagesToScan("dev.thangngo.entities");
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
+        emf.setDataSource(dataSource());
+        emf.setPackagesToScan("dev.thangngo");
+        emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
-        Properties props = new Properties();
-        props.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        props.put("hibernate.hbm2ddl.auto", "update");
-        props.put("hibernate.show_sql", "true");
-        props.put("hibernate.format_sql", "true");
+        Properties jpaProperties = new Properties();
+        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
+        jpaProperties.put("hibernate.show_sql", "true");
+        jpaProperties.put("hibernate.format_sql", "true");
 
-        factoryBean.setHibernateProperties(props);
-        return factoryBean;
+        emf.setJpaProperties(jpaProperties);
+        return emf;
     }
 
     @Bean
-    public HibernateTransactionManager transactionManager() {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
-        txManager.setSessionFactory(sessionFactory().getObject());
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
+    }
+
+    @Bean
+    public PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
+        return new PersistenceAnnotationBeanPostProcessor();
     }
 }
